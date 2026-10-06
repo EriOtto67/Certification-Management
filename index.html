@@ -24,9 +24,10 @@
     }
 
     h1 {
-      font-size: 24px;
-      margin: 0 0 30px;
-    }
+  font-size: 24px;
+  margin: 0 0 30px;
+  color: #2e7d32;
+}
 
     label {
       display: block;
@@ -44,22 +45,32 @@
       margin-bottom: 20px;
     }
 
-    button {
-      width: 100%;
-      padding: 13px;
-      font-size: 17px;
-      font-weight: bold;
-      color: #ffffff;
-      background: #3498db;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    input:focus {
+  border-color: #2e7d32;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+}
 
-    button:disabled {
-      background: #999999;
-      cursor: default;
-    }
+    button {
+  width: 100%;
+  padding: 13px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #2e7d32;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #256628;
+}
+
+button:disabled {
+  background: #999999;
+  cursor: default;
+}
 
     #message {
       margin-top: 20px;
