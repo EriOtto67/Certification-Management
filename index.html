@@ -364,6 +364,16 @@ margin-top: 24px;
 
     }
 
+    /* 従業員番号は半角数字のみ */
+document
+  .getElementById("employeeNo")
+  .addEventListener("input", function () {
+
+    this.value =
+      this.value.replace(/[^0-9]/g, "");
+
+  });
+
 
     /* Enterキーでも確認 */
     document
