@@ -166,10 +166,18 @@
         }
 
 
-        message.textContent =
-          "Power Automateとの通信に成功しました。";
+        const data = await response.json();
 
-        message.className = "success";
+if (!data.name) {
+  message.textContent = "該当する従業員が見つかりませんでした。";
+  message.className = "error";
+  return;
+}
+
+message.innerHTML =
+  `氏名：<strong>${data.name}</strong>`;
+
+message.className = "success";
 
 
       } catch (error) {
