@@ -55,6 +55,24 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    button:disabled {
+      background: #999999;
+      cursor: default;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #198754;
+    }
+
+    .error {
+      color: #d32f2f;
+    }
   </style>
 </head>
 
@@ -70,13 +88,120 @@
       type="text"
       id="employeeNo"
       placeholder="従業員番号を入力してください"
+      autocomplete="off"
     >
 
-    <button type="button">
+    <button
+      type="button"
+      id="searchButton"
+      onclick="sendEmployeeNo()"
+    >
       確認する
     </button>
 
+    <div id="message"></div>
+
   </div>
+
+
+  <script>
+
+    const FLOW_URL = "https://default1a2cf14ad33440fe9e6c8e9728b84d.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b693c735e232429d960ea490697bd2e4/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GAz4kHywGHHs_xlSci1Zst9WtPy3F5zSdKd9oVM6riA";
+
+
+    async function sendEmployeeNo() {
+
+      const employeeNo =
+        document.getElementById("employeeNo").value.trim();
+
+      const button =
+        document.getElementById("searchButton");
+
+      const message =
+        document.getElementById("message");
+
+
+      message.textContent = "";
+      message.className = "";
+
+
+      if (!employeeNo) {
+
+        message.textContent =
+          "従業員番号を入力してください。";
+
+        message.className = "error";
+
+        return;
+      }
+
+
+      button.disabled = true;
+      button.textContent = "確認中...";
+
+
+      try {
+
+        const response = await fetch(FLOW_URL, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            employeeNo: employeeNo
+          })
+
+        });
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "HTTP " + response.status
+          );
+
+        }
+
+
+        message.textContent =
+          "Power Automateとの通信に成功しました。";
+
+        message.className = "success";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+          "Power Automateとの通信に失敗しました。";
+
+        message.className = "error";
+
+      } finally {
+
+        button.disabled = false;
+        button.textContent = "確認する";
+
+      }
+
+    }
+
+
+    document
+      .getElementById("employeeNo")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          sendEmployeeNo();
+        }
+
+      });
+
+  </script>
 
 </body>
 </html>
