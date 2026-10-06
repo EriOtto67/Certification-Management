@@ -304,6 +304,104 @@ margin-top: 24px;
     const FLOW_URL =
       "https://default1a2cf14ad33440fe9e6c8e9728b84d.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b693c735e232429d960ea490697bd2e4/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GAz4kHywGHHs_xlSci1Zst9WtPy3F5zSdKd9oVM6riA";
 
+    const loginButton =
+  document.getElementById("loginButton");
+
+const loginPassword =
+  document.getElementById("loginPassword");
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+const loginScreen =
+  document.getElementById("loginScreen");
+
+const employeeScreen =
+  document.getElementById("employeeScreen");
+
+
+loginButton.addEventListener("click", async function () {
+
+  const password =
+    loginPassword.value.trim();
+
+  loginMessage.textContent = "";
+
+
+  if (password === "") {
+
+    loginMessage.textContent =
+      "パスワードを入力して下さい。";
+
+    return;
+  }
+
+
+  loginButton.disabled = true;
+  loginButton.textContent = "確認中です...";
+
+
+  try {
+
+    const response =
+      await fetch(LOGIN_FLOW_URL, {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          password: password
+        })
+
+      });
+
+
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (data.success === true) {
+
+      loginScreen.style.display = "none";
+      employeeScreen.style.display = "block";
+
+      loginPassword.value = "";
+
+    } else {
+
+      loginMessage.textContent =
+        "パスワードが違います。";
+
+      loginPassword.value = "";
+      loginPassword.focus();
+
+    }
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    loginMessage.textContent =
+      "認証に失敗しました。";
+
+  } finally {
+
+    loginButton.disabled = false;
+    loginButton.textContent = "ログイン";
+
+  }
+
+});
+
 
     async function sendEmployeeNo() {
 
