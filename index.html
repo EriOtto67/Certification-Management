@@ -226,6 +226,14 @@
 
       <div id="message"></div>
 
+      <button
+  type="button"
+  id="nextButton"
+  style="display: none;"
+>
+  資格情報更新に進む
+</button>
+
     </div>
 
   </div>
@@ -325,6 +333,8 @@
 
         message.className =
           "success";
+
+        document.getElementById("nextButton").style.display = "block";
 
 
       } catch (error) {
