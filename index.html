@@ -197,7 +197,57 @@ margin-top: 24px;
 
   <div class="page">
 
-    <h1>従業員情報確認</h1>
+    <!-- ====================================== -->
+    <!-- ログイン画面 -->
+    <!-- ====================================== -->
+
+    <div id="loginScreen">
+
+      <h1>資格情報更新</h1>
+
+      <div class="container">
+
+        <div class="form-title">
+          ログイン
+        </div>
+
+        <div class="form-group">
+
+          <label for="loginPassword">
+            パスワード
+            <span class="required">必須</span>
+          </label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="パスワードを入力して下さい"
+            autocomplete="off"
+          >
+
+        </div>
+
+        <button
+          type="button"
+          id="loginButton"
+        >
+          ログイン
+        </button>
+
+        <div id="loginMessage"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ====================================== -->
+    <!-- 従業員情報確認画面 -->
+    <!-- ====================================== -->
+
+    <div id="employeeScreen" style="display: none;">
+
+      <h1>従業員情報確認</h1>
 
     <div class="container">
 
@@ -241,7 +291,10 @@ margin-top: 24px;
   資格情報更新に進む
 </button>
 
+        </div>
+
     </div>
+    <!-- employeeScreen 終了 -->
 
   </div>
 
