@@ -1279,6 +1279,142 @@ backToReportSelectButton.addEventListener("click", function () {
 });
 
   /* ====================================== */
+/* 危険物免状 画像選択・撮影 */
+/* ====================================== */
+
+const licenseFrontFile =
+  document.getElementById("licenseFrontFile");
+
+const licenseFrontCamera =
+  document.getElementById("licenseFrontCamera");
+
+const licenseFrontFileButton =
+  document.getElementById("licenseFrontFileButton");
+
+const licenseFrontCameraButton =
+  document.getElementById("licenseFrontCameraButton");
+
+const licenseFrontPreview =
+  document.getElementById("licenseFrontPreview");
+
+
+const licenseBackFile =
+  document.getElementById("licenseBackFile");
+
+const licenseBackCamera =
+  document.getElementById("licenseBackCamera");
+
+const licenseBackFileButton =
+  document.getElementById("licenseBackFileButton");
+
+const licenseBackCameraButton =
+  document.getElementById("licenseBackCameraButton");
+
+const licenseBackPreview =
+  document.getElementById("licenseBackPreview");
+
+
+/* 表：画像を選択 */
+licenseFrontFileButton.addEventListener("click", function () {
+
+  licenseFrontFile.click();
+
+});
+
+
+/* 表：カメラを起動 */
+licenseFrontCameraButton.addEventListener("click", function () {
+
+  licenseFrontCamera.click();
+
+});
+
+
+/* 裏：画像を選択 */
+licenseBackFileButton.addEventListener("click", function () {
+
+  licenseBackFile.click();
+
+});
+
+
+/* 裏：カメラを起動 */
+licenseBackCameraButton.addEventListener("click", function () {
+
+  licenseBackCamera.click();
+
+});
+
+
+/* ====================================== */
+/* プレビュー表示 */
+/* ====================================== */
+
+function showImagePreview(input, preview) {
+
+  const file =
+    input.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  const imageUrl =
+    URL.createObjectURL(file);
+
+  preview.src =
+    imageUrl;
+
+  preview.style.display =
+    "block";
+
+}
+
+
+/* 表：画像選択 */
+licenseFrontFile.addEventListener("change", function () {
+
+  showImagePreview(
+    licenseFrontFile,
+    licenseFrontPreview
+  );
+
+});
+
+
+/* 表：カメラ撮影 */
+licenseFrontCamera.addEventListener("change", function () {
+
+  showImagePreview(
+    licenseFrontCamera,
+    licenseFrontPreview
+  );
+
+});
+
+
+/* 裏：画像選択 */
+licenseBackFile.addEventListener("change", function () {
+
+  showImagePreview(
+    licenseBackFile,
+    licenseBackPreview
+  );
+
+});
+
+
+/* 裏：カメラ撮影 */
+licenseBackCamera.addEventListener("change", function () {
+
+  showImagePreview(
+    licenseBackCamera,
+    licenseBackPreview
+  );
+
+});
+
+  /* ====================================== */
 /* 免状取得時・資格情報更新 */
 /* ====================================== */
 
