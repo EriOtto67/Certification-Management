@@ -133,6 +133,10 @@ input[type="date"] {
   width: 100%;
 }
 
+.date-input-wrap input[type="date"] {
+  color: transparent;
+}
+
 .date-input-wrap .date-placeholder {
   position: absolute;
   top: 50%;
@@ -143,7 +147,11 @@ input[type="date"] {
   pointer-events: none;
 }
 
-.date-input-wrap input[type="date"]:valid + .date-placeholder {
+.date-input-wrap.has-value input[type="date"] {
+  color: #333333;
+}
+
+.date-input-wrap.has-value .date-placeholder {
   display: none;
 }
 
@@ -978,16 +986,17 @@ document.querySelectorAll(".date-input-wrap").forEach(function (wrap) {
   const dateInput =
     wrap.querySelector('input[type="date"]');
 
-  const placeholder =
-    wrap.querySelector(".date-placeholder");
-
 
   function updateDatePlaceholder() {
 
     if (dateInput.value) {
-      placeholder.style.display = "none";
+
+      wrap.classList.add("has-value");
+
     } else {
-      placeholder.style.display = "block";
+
+      wrap.classList.remove("has-value");
+
     }
 
   }
