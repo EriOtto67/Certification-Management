@@ -102,6 +102,16 @@
         box-shadow 0.2s;
     }
 
+    /* 日付入力欄のスマホはみ出し防止 */
+input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
     input:focus {
       border-color: #00c853;
 
