@@ -1922,6 +1922,46 @@ licenseBackPreview.style.display = "none";
 
 licenseBackDeleteButton.style.display = "none";
 
+  /* ====================================== */
+/* 免状更新時の入力内容をクリア */
+/* ====================================== */
+
+/* 写真有効期限 */
+document.getElementById("photoExpiryDate").value = "";
+
+
+/* 保安講習受講日 */
+document.getElementById("safetyTrainingDate").value = "";
+
+
+/* 保安講習受講予定日 */
+document.getElementById("safetyTrainingScheduledDate").value = "";
+
+
+/* 更新用 危険物免状 表 */
+updateLicenseFrontFile.value = "";
+updateLicenseFrontCamera.value = "";
+
+updateLicenseFrontPreview.src = "";
+updateLicenseFrontPreview.style.display = "none";
+
+updateLicenseFrontDeleteButton.style.display = "none";
+
+
+/* 更新用 危険物免状 裏 */
+updateLicenseBackFile.value = "";
+updateLicenseBackCamera.value = "";
+
+updateLicenseBackPreview.src = "";
+updateLicenseBackPreview.style.display = "none";
+
+updateLicenseBackDeleteButton.style.display = "none";
+
+
+/* 免状更新結果メッセージ */
+licenseRenewalUpdateMessage.textContent = "";
+licenseRenewalUpdateMessage.className = "";
+
 
   /* 更新結果メッセージもクリア */
   issueDateUpdateMessage.textContent = "";
