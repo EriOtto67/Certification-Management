@@ -134,6 +134,30 @@ input[type="date"] {
         0 0 0 2px rgba(0, 200, 83, 0.12);
     }
 
+    /* ラジオボタン */
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0 8px 0 0;
+  padding: 0;
+  accent-color: #00b84f;
+  vertical-align: middle;
+  box-shadow: none;
+}
+
+    #licenseGetFields label:has(input[type="radio"]) {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  margin-bottom: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+input[type="radio"] + span {
+  vertical-align: middle;
+}
+
     /* 確認ボタン */
     button {
       width: 100%;
