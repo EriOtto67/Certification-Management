@@ -445,17 +445,76 @@ margin-top: 24px;
     免状取得時
   </div>
 
+
+  <!-- 危険物有無 -->
   <div class="form-group">
 
-  <label for="issueDate">
-    交付日
-    <span class="required">必須</span>
-  </label>
+    <label>
+      危険物有無
+      <span class="required">必須</span>
+    </label>
 
-  <input
-    type="date"
-    id="issueDate"
-  >
+    <label>
+      <input
+        type="radio"
+        name="hazardousMaterial"
+        value="いいえ"
+      >
+      いいえ
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="hazardousMaterial"
+        value="丙種のみ"
+      >
+      丙種のみ
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="hazardousMaterial"
+        value="はい（乙4または甲種を取得）"
+      >
+      はい（乙4または甲種を取得）
+    </label>
+
+  </div>
+
+
+  <!-- 交付日 -->
+  <div class="form-group">
+
+    <label for="issueDate">
+      交付日
+      <span class="required">必須</span>
+    </label>
+
+    <input
+      type="date"
+      id="issueDate"
+    >
+
+  </div>
+
+
+  <!-- 写真有効期限 -->
+  <div class="form-group">
+
+    <label for="licensePhotoExpiryDate">
+      写真有効期限
+      <span class="required">必須</span>
+    </label>
+
+    <input
+      type="date"
+      id="licensePhotoExpiryDate"
+    >
+
+  </div>
+
 
   <button
     type="button"
@@ -468,9 +527,6 @@ margin-top: 24px;
   <div id="issueDateUpdateMessage"></div>
 
 </div>
-
-</div>
-
 
 <!-- ====================================== -->
 <!-- 免状更新時 -->
