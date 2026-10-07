@@ -1085,9 +1085,21 @@ backToReportSelectButton.addEventListener("click", function () {
   /* 入力内容をクリア */
   document.getElementById("issueDate").value = "";
 
+  document.getElementById("licensePhotoExpiryDate").value = "";
+
   document.getElementById("photoExpiryDate").value = "";
 
   document.getElementById("otherQualification").value = "";
+
+
+  /* 危険物有無の選択を解除 */
+  document
+    .querySelectorAll('input[name="hazardousMaterial"]')
+    .forEach(function (radio) {
+
+      radio.checked = false;
+
+    });
 
 
   /* 更新結果メッセージもクリア */
@@ -1098,12 +1110,8 @@ backToReportSelectButton.addEventListener("click", function () {
   /* 各報告項目を非表示 */
   hideAllReportFields();
 
-
-  /* 資格情報更新画面を閉じる */
   updateScreen.style.display = "none";
 
-
-  /* 従業員情報確認画面へ戻る */
   employeeScreen.style.display = "block";
 
   document
