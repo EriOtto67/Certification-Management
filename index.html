@@ -1289,6 +1289,27 @@ backToReportSelectButton.addEventListener("click", function () {
 
     });
 
+  /* 危険物免状画像をクリア */
+
+/* 表 */
+licenseFrontFile.value = "";
+licenseFrontCamera.value = "";
+
+licenseFrontPreview.src = "";
+licenseFrontPreview.style.display = "none";
+
+licenseFrontDeleteButton.style.display = "none";
+
+
+/* 裏 */
+licenseBackFile.value = "";
+licenseBackCamera.value = "";
+
+licenseBackPreview.src = "";
+licenseBackPreview.style.display = "none";
+
+licenseBackDeleteButton.style.display = "none";
+
 
   /* 更新結果メッセージもクリア */
   issueDateUpdateMessage.textContent = "";
@@ -1510,6 +1531,37 @@ const issueDateUpdateButton =
 const issueDateUpdateMessage =
   document.getElementById("issueDateUpdateMessage");
 
+  /* 画像ファイルをBase64に変換 */
+function fileToBase64(file) {
+
+  return new Promise(function (resolve, reject) {
+
+    const reader =
+      new FileReader();
+
+    reader.onload = function () {
+
+      const base64 =
+        reader.result
+          .split(",")[1];
+
+      resolve(base64);
+
+    };
+
+    reader.onerror = function () {
+
+      reject(
+        new Error("画像の読み込みに失敗しました。")
+      );
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
 
 issueDateUpdateButton.addEventListener("click", async function () {
 
@@ -1544,6 +1596,17 @@ issueDateUpdateButton.addEventListener("click", async function () {
     document
       .getElementById("licensePhotoExpiryDate")
       .value;
+
+  /* 危険物免状 表 */
+const licenseFrontImage =
+  licenseFrontFile.files[0] ||
+  licenseFrontCamera.files[0];
+
+
+/* 危険物免状 裏 */
+const licenseBackImage =
+  licenseBackFile.files[0] ||
+  licenseBackCamera.files[0];
 
 
   issueDateUpdateMessage.textContent = "";
@@ -1589,6 +1652,29 @@ issueDateUpdateButton.addEventListener("click", async function () {
     return;
   }
 
+    if (!licenseFrontImage) {
+
+  issueDateUpdateMessage.textContent =
+    "危険物免状（表）の画像を選択または撮影して下さい。";
+
+  issueDateUpdateMessage.className =
+    "error";
+
+  return;
+}
+
+
+if (!licenseBackImage) {
+
+  issueDateUpdateMessage.textContent =
+    "危険物免状（裏）の画像を選択または撮影して下さい。";
+
+  issueDateUpdateMessage.className =
+    "error";
+
+  return;
+}
+
 
   /* ====================================== */
   /* Power Automateへ送信 */
@@ -1602,6 +1688,13 @@ issueDateUpdateButton.addEventListener("click", async function () {
 
   try {
 
+        /* 表・裏画像をBase64へ変換 */
+    const licenseFrontBase64 =
+      await fileToBase64(licenseFrontImage);
+
+    const licenseBackBase64 =
+      await fileToBase64(licenseBackImage);
+
     const response =
       await fetch(
         UPDATE_FLOW_URL,
@@ -1614,20 +1707,32 @@ issueDateUpdateButton.addEventListener("click", async function () {
 
           body: JSON.stringify({
 
-            employeeNo: employeeNo,
+  employeeNo: employeeNo,
 
-            updateType: "licenseGet",
+  updateType: "licenseGet",
 
-            hazardousMaterial:
-              hazardousMaterial,
+  hazardousMaterial:
+    hazardousMaterial,
 
-            issueDate:
-              issueDate,
+  issueDate:
+    issueDate,
 
-            photoExpiryDate:
-              photoExpiryDate
+  photoExpiryDate:
+    photoExpiryDate,
 
-          })
+  licenseFront:
+    licenseFrontBase64,
+
+  licenseFrontName:
+    licenseFrontImage.name,
+
+  licenseBack:
+    licenseBackBase64,
+
+  licenseBackName:
+    licenseBackImage.name
+
+})
 
         }
       );
