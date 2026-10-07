@@ -940,6 +940,211 @@ margin-top: 24px;
 
 </div>
 
+  <!-- 保安講習受講日 -->
+<div class="form-group">
+
+  <label for="safetyTrainingDate">
+    保安講習受講日
+  </label>
+
+  <div class="date-input-wrap">
+
+    <input
+      type="date"
+      id="safetyTrainingDate"
+    >
+
+    <span class="date-placeholder">
+      カレンダーから選択
+    </span>
+
+  </div>
+
+</div>
+
+
+<!-- 保安講習受講予定日 -->
+<div class="form-group">
+
+  <label for="safetyTrainingScheduledDate">
+    保安講習受講予定日
+  </label>
+
+  <div class="date-input-wrap">
+
+    <input
+      type="date"
+      id="safetyTrainingScheduledDate"
+    >
+
+    <span class="date-placeholder">
+      カレンダーから選択
+    </span>
+
+  </div>
+
+</div>
+
+  <!-- ====================================== -->
+<!-- 更新する危険物免状 表 -->
+<!-- ====================================== -->
+
+<div class="form-group">
+
+  <label>
+    危険物免状（表）
+    <span class="optional">変更する場合のみ</span>
+  </label>
+
+  <input
+    type="file"
+    id="updateLicenseFrontFile"
+    accept="image/*"
+    style="display: none;"
+  >
+
+  <input
+    type="file"
+    id="updateLicenseFrontCamera"
+    accept="image/*"
+    capture="environment"
+    style="display: none;"
+  >
+
+  <div class="image-button-row">
+
+    <button
+      type="button"
+      id="updateLicenseFrontFileButton"
+      class="image-select-button"
+    >
+      画像を選択
+    </button>
+
+    <button
+      type="button"
+      id="updateLicenseFrontCameraButton"
+      class="image-select-button"
+    >
+      カメラを起動
+    </button>
+
+  </div>
+
+  <img
+    id="updateLicenseFrontPreview"
+    alt="更新する危険物免状 表 プレビュー"
+    style="
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      margin-top: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+    "
+  >
+
+  <button
+    type="button"
+    id="updateLicenseFrontDeleteButton"
+    class="image-delete-button"
+    style="display: none;"
+  >
+    選択した画像を削除
+  </button>
+
+</div>
+
+
+<!-- ====================================== -->
+<!-- 更新する危険物免状 裏 -->
+<!-- ====================================== -->
+
+<div class="form-group">
+
+  <label>
+    危険物免状（裏）
+    <span class="optional">変更する場合のみ</span>
+  </label>
+
+  <input
+    type="file"
+    id="updateLicenseBackFile"
+    accept="image/*"
+    style="display: none;"
+  >
+
+  <input
+    type="file"
+    id="updateLicenseBackCamera"
+    accept="image/*"
+    capture="environment"
+    style="display: none;"
+  >
+
+  <div class="image-button-row">
+
+    <button
+      type="button"
+      id="updateLicenseBackFileButton"
+      class="image-select-button"
+    >
+      画像を選択
+    </button>
+
+    <button
+      type="button"
+      id="updateLicenseBackCameraButton"
+      class="image-select-button"
+    >
+      カメラを起動
+    </button>
+
+  </div>
+
+  <img
+    id="updateLicenseBackPreview"
+    alt="更新する危険物免状 裏 プレビュー"
+    style="
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      margin-top: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+    "
+  >
+
+  <button
+    type="button"
+    id="updateLicenseBackDeleteButton"
+    class="image-delete-button"
+    style="display: none;"
+  >
+    選択した画像を削除
+  </button>
+
+</div>
+
+  <!-- ====================================== -->
+<!-- 免状更新時・更新ボタン -->
+<!-- ====================================== -->
+
+<div class="update-button-area">
+
+  <button
+    type="button"
+    id="licenseRenewalUpdateButton"
+  >
+    更新する
+  </button>
+
+  <div id="licenseRenewalUpdateMessage"></div>
+
+</div>
+
 </div>
 
 
@@ -1688,6 +1893,155 @@ licenseBackDeleteButton.addEventListener("click", function () {
 
   /* 削除ボタンを非表示 */
   licenseBackDeleteButton.style.display = "none";
+
+});
+
+  /* ====================================== */
+/* 免状更新時・画像選択と撮影 */
+/* ====================================== */
+
+const updateLicenseFrontFile =
+  document.getElementById("updateLicenseFrontFile");
+
+const updateLicenseFrontCamera =
+  document.getElementById("updateLicenseFrontCamera");
+
+const updateLicenseFrontFileButton =
+  document.getElementById("updateLicenseFrontFileButton");
+
+const updateLicenseFrontCameraButton =
+  document.getElementById("updateLicenseFrontCameraButton");
+
+const updateLicenseFrontPreview =
+  document.getElementById("updateLicenseFrontPreview");
+
+const updateLicenseFrontDeleteButton =
+  document.getElementById("updateLicenseFrontDeleteButton");
+
+
+const updateLicenseBackFile =
+  document.getElementById("updateLicenseBackFile");
+
+const updateLicenseBackCamera =
+  document.getElementById("updateLicenseBackCamera");
+
+const updateLicenseBackFileButton =
+  document.getElementById("updateLicenseBackFileButton");
+
+const updateLicenseBackCameraButton =
+  document.getElementById("updateLicenseBackCameraButton");
+
+const updateLicenseBackPreview =
+  document.getElementById("updateLicenseBackPreview");
+
+const updateLicenseBackDeleteButton =
+  document.getElementById("updateLicenseBackDeleteButton");
+
+
+/* 表：画像を選択 */
+updateLicenseFrontFileButton.addEventListener("click", function () {
+
+  updateLicenseFrontFile.click();
+
+});
+
+
+/* 表：カメラを起動 */
+updateLicenseFrontCameraButton.addEventListener("click", function () {
+
+  updateLicenseFrontCamera.click();
+
+});
+
+
+/* 裏：画像を選択 */
+updateLicenseBackFileButton.addEventListener("click", function () {
+
+  updateLicenseBackFile.click();
+
+});
+
+
+/* 裏：カメラを起動 */
+updateLicenseBackCameraButton.addEventListener("click", function () {
+
+  updateLicenseBackCamera.click();
+
+});
+
+
+/* 表：画像を選択した時 */
+updateLicenseFrontFile.addEventListener("change", function () {
+
+  showImagePreview(
+    updateLicenseFrontFile,
+    updateLicenseFrontPreview,
+    updateLicenseFrontDeleteButton
+  );
+
+});
+
+
+/* 表：カメラで撮影した時 */
+updateLicenseFrontCamera.addEventListener("change", function () {
+
+  showImagePreview(
+    updateLicenseFrontCamera,
+    updateLicenseFrontPreview,
+    updateLicenseFrontDeleteButton
+  );
+
+});
+
+
+/* 裏：画像を選択した時 */
+updateLicenseBackFile.addEventListener("change", function () {
+
+  showImagePreview(
+    updateLicenseBackFile,
+    updateLicenseBackPreview,
+    updateLicenseBackDeleteButton
+  );
+
+});
+
+
+/* 裏：カメラで撮影した時 */
+updateLicenseBackCamera.addEventListener("change", function () {
+
+  showImagePreview(
+    updateLicenseBackCamera,
+    updateLicenseBackPreview,
+    updateLicenseBackDeleteButton
+  );
+
+});
+
+
+/* 表：選択した画像を削除 */
+updateLicenseFrontDeleteButton.addEventListener("click", function () {
+
+  updateLicenseFrontFile.value = "";
+  updateLicenseFrontCamera.value = "";
+
+  updateLicenseFrontPreview.src = "";
+  updateLicenseFrontPreview.style.display = "none";
+
+  updateLicenseFrontDeleteButton.style.display = "none";
+
+});
+
+
+/* 裏：選択した画像を削除 */
+updateLicenseBackDeleteButton.addEventListener("click", function () {
+
+  updateLicenseBackFile.value = "";
+  updateLicenseBackCamera.value = "";
+
+  updateLicenseBackPreview.src = "";
+  updateLicenseBackPreview.style.display = "none";
+
+  updateLicenseBackDeleteButton.style.display = "none";
 
 });
 
