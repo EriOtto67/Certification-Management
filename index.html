@@ -138,6 +138,21 @@
       cursor: default;
     }
 
+    /* 戻るボタン */
+.back-button {
+  margin: 0 0 24px;
+  background-color: #777777;
+}
+
+.back-button:hover {
+  background-color: #666666;
+}
+
+.back-button:active {
+  background-color: #555555;
+}
+
+
     /* ====================================== */
 /* ログイン画面だけ青色 */
 /* ====================================== */
@@ -382,6 +397,15 @@ margin-top: 24px;
     <div class="form-title">
       更新情報入力
     </div>
+
+    <button
+  type="button"
+  id="backToReportSelectButton"
+  class="back-button"
+>
+  ← 報告内容選択に戻る
+</button>
+
 
 <!-- ====================================== -->
 <!-- 免状取得時 -->
@@ -824,6 +848,32 @@ otherQualificationButton.addEventListener("click", function () {
   });
 
 });
+
+  /* ====================================== */
+/* 報告内容選択画面へ戻る */
+/* ====================================== */
+
+const backToReportSelectButton =
+  document.getElementById("backToReportSelectButton");
+
+
+backToReportSelectButton.addEventListener("click", function () {
+
+  hideAllReportFields();
+
+  updateScreen.style.display = "none";
+
+  employeeScreen.style.display = "block";
+
+  document.getElementById("reportSelect").style.display = "block";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+});
+  
   </script>
 
 </body>
