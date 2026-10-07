@@ -679,7 +679,7 @@ loginButton.addEventListener("click", async function () {
         message.className =
           "success";
 
-        document.getElementById("nextButton").style.display = "block";
+        document.getElementById("reportSelect").style.display = "block";
 
 
       } catch (error) {
@@ -729,29 +729,8 @@ document
         }
       );
 
-    /* ====================================== */
-/* 資格情報更新画面へ進む */
-/* ====================================== */
-
-const nextButton =
-  document.getElementById("nextButton");
-
 const updateScreen =
   document.getElementById("updateScreen");
-
-
-nextButton.addEventListener("click", function () {
-
-  employeeScreen.style.display = "none";
-
-  updateScreen.style.display = "block";
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-});
 
     /* ====================================== */
 /* 報告内容切り替え */
