@@ -773,7 +773,16 @@ licenseGetButton.addEventListener("click", function () {
 
   hideAllReportFields();
 
+  employeeScreen.style.display = "none";
+
+  updateScreen.style.display = "block";
+
   licenseGetFields.style.display = "block";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 });
 
@@ -784,10 +793,18 @@ licenseUpdateButton.addEventListener("click", function () {
 
   hideAllReportFields();
 
+  employeeScreen.style.display = "none";
+
+  updateScreen.style.display = "block";
+
   licenseUpdateFields.style.display = "block";
 
-});
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
+});
 
 /* その他資格取得時 */
 
@@ -795,10 +812,18 @@ otherQualificationButton.addEventListener("click", function () {
 
   hideAllReportFields();
 
+  employeeScreen.style.display = "none";
+
+  updateScreen.style.display = "block";
+
   otherQualificationFields.style.display = "block";
 
-});
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
+});
   </script>
 
 </body>
