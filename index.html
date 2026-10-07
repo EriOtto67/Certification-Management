@@ -213,6 +213,18 @@ input[type="date"] {
   display: none;
 }
 
+    /* 自動計算される日付 */
+.auto-calculated-date {
+  background-color: #eeeeee;
+  color: #666666;
+  cursor: default;
+}
+
+.auto-calculated-date:focus {
+  border-color: #cccccc;
+  box-shadow: none;
+}
+
     input:focus {
       border-color: #00c853;
 
@@ -972,9 +984,11 @@ margin-top: 24px;
   <div class="date-input-wrap">
 
     <input
-      type="date"
-      id="safetyTrainingScheduledDate"
-    >
+  type="date"
+  id="safetyTrainingScheduledDate"
+  readonly
+  class="auto-calculated-date"
+>
 
     <span class="date-placeholder">
       カレンダーから選択
@@ -1562,6 +1576,79 @@ document.querySelectorAll(".date-input-wrap").forEach(function (wrap) {
 
 });
 
+  /* ====================================== */
+/* 保安講習受講予定日の自動計算 */
+/* ====================================== */
+
+const safetyTrainingDate =
+  document.getElementById("safetyTrainingDate");
+
+const safetyTrainingScheduledDate =
+  document.getElementById("safetyTrainingScheduledDate");
+
+
+safetyTrainingDate.addEventListener("change", function () {
+
+  if (!safetyTrainingDate.value) {
+
+    safetyTrainingScheduledDate.value = "";
+    safetyTrainingScheduledDate.dispatchEvent(
+      new Event("change")
+    );
+
+    return;
+  }
+
+
+  const selectedDate =
+    new Date(
+      safetyTrainingDate.value + "T00:00:00"
+    );
+
+  const selectedYear =
+    selectedDate.getFullYear();
+
+
+  /* その年の3月31日 */
+  const march31 =
+    new Date(
+      selectedYear,
+      2,
+      31
+    );
+
+
+  /* 受講日以降で直近の3月31日を求める */
+  let baseYear;
+
+  if (selectedDate <= march31) {
+
+    baseYear =
+      selectedYear;
+
+  } else {
+
+    baseYear =
+      selectedYear + 1;
+
+  }
+
+
+  /* 直近の3月31日から3年後 */
+  const scheduledYear =
+    baseYear + 3;
+
+
+  safetyTrainingScheduledDate.value =
+    scheduledYear + "-03-31";
+
+
+  /* 「カレンダーから選択」を消す */
+  safetyTrainingScheduledDate.dispatchEvent(
+    new Event("change")
+  );
+
+});
 
 /* 免状更新時 */
 
