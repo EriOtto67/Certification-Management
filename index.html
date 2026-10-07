@@ -215,6 +215,30 @@ input[type="radio"] + span {
       cursor: default;
     }
 
+    /* 画像選択・カメラボタン */
+.image-button-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.image-select-button {
+  flex: 1;
+  width: auto;
+  height: 42px;
+  margin-top: 0;
+  background-color: #29b6f6;
+  font-size: 15px;
+}
+
+.image-select-button:hover {
+  background-color: #039be5;
+}
+
+.image-select-button:active {
+  background-color: #0288d1;
+}
+
     /* 戻るボタン */
 .back-button {
   margin: 0 0 24px;
@@ -611,9 +635,12 @@ margin-top: 24px;
     style="display: none;"
   >
 
+  <div class="image-button-row">
+
   <button
     type="button"
     id="licenseFrontFileButton"
+    class="image-select-button"
   >
     画像を選択
   </button>
@@ -621,10 +648,12 @@ margin-top: 24px;
   <button
     type="button"
     id="licenseFrontCameraButton"
-    style="margin-top: 12px;"
+    class="image-select-button"
   >
     カメラを起動
   </button>
+
+</div>
 
   <img
     id="licenseFrontPreview"
@@ -671,9 +700,12 @@ margin-top: 24px;
     style="display: none;"
   >
 
+  <div class="image-button-row">
+
   <button
     type="button"
     id="licenseBackFileButton"
+    class="image-select-button"
   >
     画像を選択
   </button>
@@ -681,10 +713,12 @@ margin-top: 24px;
   <button
     type="button"
     id="licenseBackCameraButton"
-    style="margin-top: 12px;"
+    class="image-select-button"
   >
     カメラを起動
   </button>
+
+</div>
 
   <img
     id="licenseBackPreview"
