@@ -1127,7 +1127,7 @@ backToReportSelectButton.addEventListener("click", function () {
 });
 
   /* ====================================== */
-/* 免状取得時・交付日更新 */
+/* 免状取得時・資格情報更新 */
 /* ====================================== */
 
 const issueDateUpdateButton =
@@ -1145,9 +1145,30 @@ issueDateUpdateButton.addEventListener("click", async function () {
       .value
       .trim();
 
+
+  /* 危険物有無 */
+  const hazardousMaterialSelected =
+    document.querySelector(
+      'input[name="hazardousMaterial"]:checked'
+    );
+
+  const hazardousMaterial =
+    hazardousMaterialSelected
+      ? hazardousMaterialSelected.value
+      : "";
+
+
+  /* 交付日 */
   const issueDate =
     document
       .getElementById("issueDate")
+      .value;
+
+
+  /* 写真有効期限 */
+  const photoExpiryDate =
+    document
+      .getElementById("licensePhotoExpiryDate")
       .value;
 
 
@@ -1155,11 +1176,14 @@ issueDateUpdateButton.addEventListener("click", async function () {
   issueDateUpdateMessage.className = "";
 
 
-  /* 交付日未入力 */
-  if (!issueDate) {
+  /* ====================================== */
+  /* 必須チェック */
+  /* ====================================== */
+
+  if (!hazardousMaterial) {
 
     issueDateUpdateMessage.textContent =
-      "交付日を入力して下さい。";
+      "危険物有無を選択して下さい。";
 
     issueDateUpdateMessage.className =
       "error";
@@ -1167,6 +1191,34 @@ issueDateUpdateButton.addEventListener("click", async function () {
     return;
   }
 
+
+  if (!issueDate) {
+
+    issueDateUpdateMessage.textContent =
+      "交付日を選択して下さい。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+
+  if (!photoExpiryDate) {
+
+    issueDateUpdateMessage.textContent =
+      "写真有効期限を選択して下さい。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+
+  /* ====================================== */
+  /* Power Automateへ送信 */
+  /* ====================================== */
 
   issueDateUpdateButton.disabled = true;
 
@@ -1187,10 +1239,22 @@ issueDateUpdateButton.addEventListener("click", async function () {
           },
 
           body: JSON.stringify({
+
             employeeNo: employeeNo,
+
             updateType: "licenseGet",
-            issueDate: issueDate
+
+            hazardousMaterial:
+              hazardousMaterial,
+
+            issueDate:
+              issueDate,
+
+            photoExpiryDate:
+              photoExpiryDate
+
           })
+
         }
       );
 
@@ -1218,7 +1282,7 @@ issueDateUpdateButton.addEventListener("click", async function () {
 
 
     issueDateUpdateMessage.textContent =
-      "交付日を更新しました。";
+      "資格情報を更新しました。";
 
     issueDateUpdateMessage.className =
       "success";
@@ -1229,7 +1293,7 @@ issueDateUpdateButton.addEventListener("click", async function () {
     console.error(error);
 
     issueDateUpdateMessage.textContent =
-      "交付日の更新に失敗しました。";
+      "資格情報の更新に失敗しました。";
 
     issueDateUpdateMessage.className =
       "error";
