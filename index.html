@@ -403,7 +403,7 @@ margin-top: 24px;
   id="backToReportSelectButton"
   class="back-button"
 >
-  ← 報告内容選択に戻る
+  報告内容選択に戻る
 </button>
 
 
@@ -872,13 +872,34 @@ const backToReportSelectButton =
 
 backToReportSelectButton.addEventListener("click", function () {
 
+  /* 入力内容をクリア */
+  document.getElementById("issueDate").value = "";
+
+  document.getElementById("photoExpiryDate").value = "";
+
+  document.getElementById("otherQualification").value = "";
+
+
+  /* 更新結果メッセージもクリア */
+  issueDateUpdateMessage.textContent = "";
+  issueDateUpdateMessage.className = "";
+
+
+  /* 各報告項目を非表示 */
   hideAllReportFields();
 
+
+  /* 資格情報更新画面を閉じる */
   updateScreen.style.display = "none";
 
+
+  /* 従業員情報確認画面へ戻る */
   employeeScreen.style.display = "block";
 
-  document.getElementById("reportSelect").style.display = "block";
+  document
+    .getElementById("reportSelect")
+    .style.display = "block";
+
 
   window.scrollTo({
     top: 0,
