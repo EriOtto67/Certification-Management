@@ -127,6 +127,26 @@ input[type="date"] {
   appearance: none;
 }
 
+    /* 日付入力の案内表示 */
+.date-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.date-input-wrap .date-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #888888;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.date-input-wrap input[type="date"]:valid + .date-placeholder {
+  display: none;
+}
+
     input:focus {
       border-color: #00c853;
 
@@ -516,10 +536,18 @@ margin-top: 24px;
       <span class="required">必須</span>
     </label>
 
-    <input
-      type="date"
-      id="issueDate"
-    >
+    <div class="date-input-wrap">
+
+  <input
+    type="date"
+    id="issueDate"
+  >
+
+  <span class="date-placeholder">
+    カレンダーから選択
+  </span>
+
+</div>
 
   </div>
 
@@ -938,6 +966,45 @@ licenseGetButton.addEventListener("click", function () {
     top: 0,
     behavior: "smooth"
   });
+
+});
+
+  /* ====================================== */
+/* 日付入力の案内表示 */
+/* ====================================== */
+
+document.querySelectorAll(".date-input-wrap").forEach(function (wrap) {
+
+  const dateInput =
+    wrap.querySelector('input[type="date"]');
+
+  const placeholder =
+    wrap.querySelector(".date-placeholder");
+
+
+  function updateDatePlaceholder() {
+
+    if (dateInput.value) {
+      placeholder.style.display = "none";
+    } else {
+      placeholder.style.display = "block";
+    }
+
+  }
+
+
+  dateInput.addEventListener(
+    "change",
+    updateDatePlaceholder
+  );
+
+  dateInput.addEventListener(
+    "input",
+    updateDatePlaceholder
+  );
+
+
+  updateDatePlaceholder();
 
 });
 
