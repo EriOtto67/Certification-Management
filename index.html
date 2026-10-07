@@ -118,6 +118,18 @@
   border-bottom: none;
 }
 
+    /* 現在登録されている免状画像 */
+.current-license-image-area {
+  padding: 14px 0;
+  border-top: 1px solid #d7e8dc;
+}
+
+.current-license-empty {
+  margin-top: 8px;
+  color: #888888;
+  font-size: 14px;
+}
+
 .current-data-label {
   flex-shrink: 0;
   color: #555555;
@@ -913,17 +925,83 @@ margin-top: 24px;
 
   <div class="current-data-row">
 
-    <span class="current-data-label">
-      保安講習受講予定日
-    </span>
+  <span class="current-data-label">
+    保安講習受講予定日
+  </span>
 
-    <span id="currentSafetyTrainingScheduledDateDisplay">
-      未登録
-    </span>
-
-  </div>
+  <span id="currentSafetyTrainingScheduledDateDisplay">
+    未登録
+  </span>
 
 </div>
+
+
+<!-- 現在の危険物免状 表 -->
+<div class="current-license-image-area">
+
+  <div class="current-data-label">
+    危険物免状（表）
+  </div>
+
+  <div
+    id="currentLicenseFrontEmpty"
+    class="current-license-empty"
+  >
+    未登録
+  </div>
+
+  <img
+    id="currentLicenseFrontImage"
+    alt="現在の危険物免状 表"
+    style="
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      margin-top: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      background-color: #ffffff;
+    "
+  >
+
+</div>
+
+
+<!-- 現在の危険物免状 裏 -->
+<div class="current-license-image-area">
+
+  <div class="current-data-label">
+    危険物免状（裏）
+  </div>
+
+  <div
+    id="currentLicenseBackEmpty"
+    class="current-license-empty"
+  >
+    未登録
+  </div>
+
+  <img
+    id="currentLicenseBackImage"
+    alt="現在の危険物免状 裏"
+    style="
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      margin-top: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      background-color: #ffffff;
+    "
+  >
+
+</div>
+
+
+</div>
+<!-- ↑ current-data-area を閉じる -->
 
 
 <div class="update-input-title">
@@ -1231,7 +1309,11 @@ const employeeScreen =
 let currentEmployeeData = {
   photoExpiryDate: "",
   safetyTrainingDate: "",
-  safetyTrainingScheduledDate: ""
+  safetyTrainingScheduledDate: "",
+  licenseFront: "",
+  licenseFrontContentType: "",
+  licenseBack: "",
+  licenseBackContentType: ""
 };
 
 loginButton.addEventListener("click", async function () {
@@ -1428,6 +1510,18 @@ currentEmployeeData.safetyTrainingDate =
 
 currentEmployeeData.safetyTrainingScheduledDate =
   data.currentSafetyTrainingScheduledDate || "";
+
+        currentEmployeeData.licenseFront =
+  data.currentLicenseFront || "";
+
+currentEmployeeData.licenseFrontContentType =
+  data.currentLicenseFrontContentType || "";
+
+currentEmployeeData.licenseBack =
+  data.currentLicenseBack || "";
+
+currentEmployeeData.licenseBackContentType =
+  data.currentLicenseBackContentType || "";
 
         document.getElementById("reportSelect").style.display = "block";
 
@@ -1681,6 +1775,63 @@ licenseUpdateButton.addEventListener("click", function () {
     .textContent =
       currentEmployeeData.safetyTrainingScheduledDate ||
       "未登録";
+
+  /* 現在の危険物免状 表を表示 */
+
+const currentLicenseFrontImage =
+  document.getElementById("currentLicenseFrontImage");
+
+const currentLicenseFrontEmpty =
+  document.getElementById("currentLicenseFrontEmpty");
+
+
+if (currentEmployeeData.licenseFront) {
+
+  currentLicenseFrontImage.src =
+    "data:" +
+    currentEmployeeData.licenseFrontContentType +
+    ";base64," +
+    currentEmployeeData.licenseFront;
+
+  currentLicenseFrontImage.style.display = "block";
+  currentLicenseFrontEmpty.style.display = "none";
+
+} else {
+
+  currentLicenseFrontImage.src = "";
+  currentLicenseFrontImage.style.display = "none";
+  currentLicenseFrontEmpty.style.display = "block";
+
+}
+
+
+/* 現在の危険物免状 裏を表示 */
+
+const currentLicenseBackImage =
+  document.getElementById("currentLicenseBackImage");
+
+const currentLicenseBackEmpty =
+  document.getElementById("currentLicenseBackEmpty");
+
+
+if (currentEmployeeData.licenseBack) {
+
+  currentLicenseBackImage.src =
+    "data:" +
+    currentEmployeeData.licenseBackContentType +
+    ";base64," +
+    currentEmployeeData.licenseBack;
+
+  currentLicenseBackImage.style.display = "block";
+  currentLicenseBackEmpty.style.display = "none";
+
+} else {
+
+  currentLicenseBackImage.src = "";
+  currentLicenseBackImage.style.display = "none";
+  currentLicenseBackEmpty.style.display = "block";
+
+}
 
 
   /* 従業員情報確認画面を閉じる */
@@ -2128,6 +2279,53 @@ updateLicenseBackDeleteButton.addEventListener("click", function () {
   updateLicenseBackPreview.style.display = "none";
 
   updateLicenseBackDeleteButton.style.display = "none";
+
+});
+
+  /* ====================================== */
+/* 免状更新時・資格情報更新 */
+/* ====================================== */
+
+const licenseRenewalUpdateButton =
+  document.getElementById("licenseRenewalUpdateButton");
+
+const licenseRenewalUpdateMessage =
+  document.getElementById("licenseRenewalUpdateMessage");
+
+
+licenseRenewalUpdateButton.addEventListener("click", async function () {
+
+  /* 写真有効期限 */
+  const photoExpiryDate =
+    document.getElementById("photoExpiryDate").value;
+
+
+  /* 保安講習受講日 */
+  const safetyTrainingDate =
+    document.getElementById("safetyTrainingDate").value;
+
+
+  /* 保安講習受講予定日 */
+  const safetyTrainingScheduledDate =
+    document.getElementById(
+      "safetyTrainingScheduledDate"
+    ).value;
+
+
+  /* 新しい危険物免状 表 */
+  const licenseFrontImage =
+    updateLicenseFrontFile.files[0] ||
+    updateLicenseFrontCamera.files[0];
+
+
+  /* 新しい危険物免状 裏 */
+  const licenseBackImage =
+    updateLicenseBackFile.files[0] ||
+    updateLicenseBackCamera.files[0];
+
+
+  licenseRenewalUpdateMessage.textContent = "";
+  licenseRenewalUpdateMessage.className = "";
 
 });
 
