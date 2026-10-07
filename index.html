@@ -84,6 +84,64 @@
       margin-bottom: 24px;
     }
 
+    /* ====================================== */
+/* 免状更新時・現在の登録内容 */
+/* ====================================== */
+
+.current-data-area {
+  margin-bottom: 28px;
+  padding: 18px;
+  background-color: #f0f8f3;
+  border-left: 4px solid #00b84f;
+  border-radius: 6px;
+}
+
+.current-data-title {
+  margin-bottom: 14px;
+  color: #00883b;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.current-data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #d7e8dc;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.current-data-row:last-child {
+  border-bottom: none;
+}
+
+.current-data-label {
+  flex-shrink: 0;
+  color: #555555;
+  font-weight: 600;
+}
+
+.current-data-row span:last-child {
+  color: #222222;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+
+/* 更新入力欄の見出し */
+.update-input-title {
+  margin: 28px 0 24px;
+  padding-top: 20px;
+  border-top: 2px solid #00c853;
+  color: #00b84f;
+  font-size: 18px;
+  font-weight: 700;
+}
+
     label {
       display: block;
       margin-bottom: 8px;
@@ -807,6 +865,59 @@ margin-top: 24px;
     免状更新時
   </div>
 
+  <!-- ====================================== -->
+<!-- 現在の登録内容 -->
+<!-- ====================================== -->
+
+<div class="current-data-area">
+
+  <div class="current-data-title">
+    現在の登録内容
+  </div>
+
+  <div class="current-data-row">
+
+    <span class="current-data-label">
+      写真有効期限
+    </span>
+
+    <span id="currentPhotoExpiryDateDisplay">
+      未登録
+    </span>
+
+  </div>
+
+  <div class="current-data-row">
+
+    <span class="current-data-label">
+      保安講習受講日
+    </span>
+
+    <span id="currentSafetyTrainingDateDisplay">
+      未登録
+    </span>
+
+  </div>
+
+  <div class="current-data-row">
+
+    <span class="current-data-label">
+      保安講習受講予定日
+    </span>
+
+    <span id="currentSafetyTrainingScheduledDateDisplay">
+      未登録
+    </span>
+
+  </div>
+
+</div>
+
+
+<div class="update-input-title">
+  更新する内容
+</div>
+
   <div class="form-group">
 
   <label for="photoExpiryDate">
@@ -898,6 +1009,12 @@ const loginScreen =
 const employeeScreen =
   document.getElementById("employeeScreen");
 
+  /* kintoneから取得した現在値を保持 */
+let currentEmployeeData = {
+  photoExpiryDate: "",
+  safetyTrainingDate: "",
+  safetyTrainingScheduledDate: ""
+};
 
 loginButton.addEventListener("click", async function () {
 
@@ -1084,6 +1201,16 @@ loginPassword.addEventListener("keydown", function (event) {
         message.className =
           "success";
 
+        /* kintoneの現在値を保持 */
+currentEmployeeData.photoExpiryDate =
+  data.currentPhotoExpiryDate || "";
+
+currentEmployeeData.safetyTrainingDate =
+  data.currentSafetyTrainingDate || "";
+
+currentEmployeeData.safetyTrainingScheduledDate =
+  data.currentSafetyTrainingScheduledDate || "";
+
         document.getElementById("reportSelect").style.display = "block";
 
 
@@ -1238,11 +1365,44 @@ licenseUpdateButton.addEventListener("click", function () {
 
   hideAllReportFields();
 
+
+  /* 現在の写真有効期限を表示 */
+  document
+    .getElementById("currentPhotoExpiryDateDisplay")
+    .textContent =
+      currentEmployeeData.photoExpiryDate ||
+      "未登録";
+
+
+  /* 現在の保安講習受講日を表示 */
+  document
+    .getElementById("currentSafetyTrainingDateDisplay")
+    .textContent =
+      currentEmployeeData.safetyTrainingDate ||
+      "未登録";
+
+
+  /* 現在の保安講習受講予定日を表示 */
+  document
+    .getElementById(
+      "currentSafetyTrainingScheduledDateDisplay"
+    )
+    .textContent =
+      currentEmployeeData.safetyTrainingScheduledDate ||
+      "未登録";
+
+
+  /* 従業員情報確認画面を閉じる */
   employeeScreen.style.display = "none";
 
+
+  /* 資格情報更新画面を表示 */
   updateScreen.style.display = "block";
 
+
+  /* 免状更新時の入力画面を表示 */
   licenseUpdateFields.style.display = "block";
+
 
   window.scrollTo({
     top: 0,
