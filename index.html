@@ -2388,6 +2388,176 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
   licenseRenewalUpdateMessage.textContent = "";
   licenseRenewalUpdateMessage.className = "";
 
+    /* ====================================== */
+  /* 変更内容があるか確認 */
+  /* ====================================== */
+
+  if (
+    !photoExpiryDate &&
+    !safetyTrainingDate &&
+    !licenseFrontImage &&
+    !licenseBackImage
+  ) {
+
+    licenseRenewalUpdateMessage.textContent =
+      "更新する項目を入力または選択して下さい。";
+
+    licenseRenewalUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+    /* ====================================== */
+  /* Power Automateへ送るデータを作成 */
+  /* ====================================== */
+
+  const requestBody = {
+
+    employeeNo:
+      document
+        .getElementById("employeeNo")
+        .value
+        .trim(),
+
+    updateType:
+      "licenseRenewal"
+
+  };
+
+
+  /* 写真有効期限 */
+  if (photoExpiryDate) {
+
+    requestBody.photoExpiryDate =
+      photoExpiryDate;
+
+  }
+
+
+  /* 保安講習受講日 */
+  if (safetyTrainingDate) {
+
+    requestBody.safetyTrainingDate =
+      safetyTrainingDate;
+
+    requestBody.safetyTrainingScheduledDate =
+      safetyTrainingScheduledDate;
+
+  }
+
+    /* ====================================== */
+  /* 新しい表画像がある場合 */
+  /* ====================================== */
+
+  if (licenseFrontImage) {
+
+    const licenseFrontBase64 =
+      await fileToBase64(licenseFrontImage);
+
+    requestBody.licenseFront =
+      licenseFrontBase64;
+
+    requestBody.licenseFrontName =
+      licenseFrontImage.name;
+
+  }
+
+
+  /* ====================================== */
+  /* 新しい裏画像がある場合 */
+  /* ====================================== */
+
+  if (licenseBackImage) {
+
+    const licenseBackBase64 =
+      await fileToBase64(licenseBackImage);
+
+    requestBody.licenseBack =
+      licenseBackBase64;
+
+    requestBody.licenseBackName =
+      licenseBackImage.name;
+
+  }
+
+    /* ====================================== */
+  /* Power Automateへ送信 */
+  /* ====================================== */
+
+  licenseRenewalUpdateButt*n.disabled = true;
+
+  licenseRenew*lUpdateButton.textContent =
+    "更*中です...";
+
+
+  try {
+
+    const resp*nse =
+      await fetch(
+        U*DATE_FLOW_URL,
+        {
+         *method: "POST",
+
+          headers* {
+            "Content-Type": "ap*lication/json"
+          },
+
+     *    body: JSON.stringify(
+        *   requestBody
+          )
+       *}
+      );
+
+
+    if (!response.ok)*{
+
+      throw new Error(
+        *HTTP " + response.status
+      );
+*    }
+
+
+    const data =
+      awa*t response.json();
+
+
+    if (data.*uccess !== true) {
+
+      throw ne* Error(
+        "更新処理が正常終了しませんでした。*
+      );
+
+    }
+
+
+    licenseRene*alUpdateMessage.textContent =
+    * "資格情報を更新しました。";
+
+    licenseRenew*lUpdateMessage.className =
+      "*uccess";
+
+
+  } catch (error) {
+
+  * console.error(error);
+
+    licens*RenewalUpdateMessage.textContent =
+      "資格情報の更新に失敗しました。";
+
+    licenseRenewalUpdateMessage.className =
+      "error";
+
+
+  } finally {
+
+    licenseRenewalUpdateButton.disabled = false;
+
+    licenseRenewalUpdateButton.textContent =
+      "更新する";
+
+  }
+
 });
 
   /* ====================================== */
