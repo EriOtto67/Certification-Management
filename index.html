@@ -2481,68 +2481,69 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
   }
 
-    /* ====================================== */
+  /* ====================================== */
   /* Power Automateへ送信 */
   /* ====================================== */
 
-  licenseRenewalUpdateButt*n.disabled = true;
+  licenseRenewalUpdateButton.disabled = true;
 
-  licenseRenew*lUpdateButton.textContent =
-    "更*中です...";
+  licenseRenewalUpdateButton.textContent =
+    "更新中です...";
 
 
   try {
 
-    const resp*nse =
+    const response =
       await fetch(
-        U*DATE_FLOW_URL,
+        UPDATE_FLOW_URL,
         {
-         *method: "POST",
+          method: "POST",
 
-          headers* {
-            "Content-Type": "ap*lication/json"
+          headers: {
+            "Content-Type": "application/json"
           },
 
-     *    body: JSON.stringify(
-        *   requestBody
+          body: JSON.stringify(
+            requestBody
           )
-       *}
+        }
       );
 
 
-    if (!response.ok)*{
+    if (!response.ok) {
 
       throw new Error(
-        *HTTP " + response.status
-      );
-*    }
-
-
-    const data =
-      awa*t response.json();
-
-
-    if (data.*uccess !== true) {
-
-      throw ne* Error(
-        "更新処理が正常終了しませんでした。*
+        "HTTP " + response.status
       );
 
     }
 
 
-    licenseRene*alUpdateMessage.textContent =
-    * "資格情報を更新しました。";
+    const data =
+      await response.json();
 
-    licenseRenew*lUpdateMessage.className =
-      "*uccess";
+
+    if (data.success !== true) {
+
+      throw new Error(
+        "更新処理が正常終了しませんでした。"
+      );
+
+    }
+
+
+    licenseRenewalUpdateMessage.textContent =
+      "資格情報を更新しました。";
+
+    licenseRenewalUpdateMessage.className =
+      "success";
 
 
   } catch (error) {
 
-  * console.error(error);
+    console.error(error);
 
-    licens*RenewalUpdateMessage.textContent =
+    licenseRenewalUpdateMessage.textContent =
       "資格情報の更新に失敗しました。";
 
     licenseRenewalUpdateMessage.className =
@@ -2559,7 +2560,7 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
   }
 
 });
-
+  
   /* ====================================== */
 /* 免状取得時・資格情報更新 */
 /* ====================================== */
