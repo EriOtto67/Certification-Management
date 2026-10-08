@@ -2531,6 +2531,22 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
     }
 
+    /* 更新した値を現在値にも反映 */
+
+if (photoExpiryDate) {
+  currentEmployeeData.photoExpiryDate =
+    photoExpiryDate;
+}
+
+if (safetyTrainingDate) {
+
+  currentEmployeeData.safetyTrainingDate =
+    safetyTrainingDate;
+
+  currentEmployeeData.safetyTrainingScheduledDate =
+    safetyTrainingScheduledDate;
+
+}
 
     licenseRenewalUpdateMessage.textContent =
       "資格情報を更新しました。";
