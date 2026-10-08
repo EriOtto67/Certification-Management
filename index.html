@@ -1927,15 +1927,36 @@ licenseBackDeleteButton.style.display = "none";
 /* ====================================== */
 
 /* 写真有効期限 */
-document.getElementById("photoExpiryDate").value = "";
+const photoExpiryDateInput =
+  document.getElementById("photoExpiryDate");
+
+photoExpiryDateInput.value = "";
+
+photoExpiryDateInput
+  .closest(".date-input-wrap")
+  .classList.remove("has-value");
 
 
 /* 保安講習受講日 */
-document.getElementById("safetyTrainingDate").value = "";
+const safetyTrainingDateInput =
+  document.getElementById("safetyTrainingDate");
+
+safetyTrainingDateInput.value = "";
+
+safetyTrainingDateInput
+  .closest(".date-input-wrap")
+  .classList.remove("has-value");
 
 
 /* 保安講習受講予定日 */
-document.getElementById("safetyTrainingScheduledDate").value = "";
+const safetyTrainingScheduledDateInput =
+  document.getElementById("safetyTrainingScheduledDate");
+
+safetyTrainingScheduledDateInput.value = "";
+
+safetyTrainingScheduledDateInput
+  .closest(".date-input-wrap")
+  .classList.remove("has-value");
 
 
 /* 更新用 危険物免状 表 */
