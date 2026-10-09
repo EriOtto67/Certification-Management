@@ -1429,12 +1429,13 @@ margin-top: 24px;
     その他資格
   </label>
 
-  <div
-    id="currentOtherQualificationDisplay"
-    class="current-other-qualification"
-  >
-    未登録
-  </div>
+  <input
+  type="text"
+  id="currentOtherQualificationDisplay"
+  class="current-other-qualification"
+  value=""
+  readonly
+>
 
 </div>
 
@@ -2322,13 +2323,12 @@ otherQualificationButton.addEventListener("click", function () {
   /* ====================================== */
 
   document
-    .getElementById(
-      "currentOtherQualificationDisplay"
-    )
-    .textContent =
-      currentEmployeeData.otherQualification ||
-      "未登録";
-
+  .getElementById(
+    "currentOtherQualificationDisplay"
+  )
+  .value =
+    currentEmployeeData.otherQualification ||
+    "未登録";
 
   /* 今回取得した資格の入力欄をクリア */
   document
