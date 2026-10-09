@@ -951,71 +951,6 @@ margin-top: 24px;
 
 </div>
 
-
-<!-- 現在の危険物免状 表 -->
-<div class="current-license-image-area">
-
-  <div class="current-data-label">
-    危険物免状（表）
-  </div>
-
-  <div
-    id="currentLicenseFrontEmpty"
-    class="current-license-empty"
-  >
-    未登録
-  </div>
-
-  <img
-    id="currentLicenseFrontImage"
-    alt="現在の危険物免状 表"
-    style="
-      display: none;
-      width: 100%;
-      max-height: 350px;
-      object-fit: contain;
-      margin-top: 10px;
-      border: 1px solid #cccccc;
-      border-radius: 6px;
-      background-color: #ffffff;
-    "
-  >
-
-</div>
-
-
-<!-- 現在の危険物免状 裏 -->
-<div class="current-license-image-area">
-
-  <div class="current-data-label">
-    危険物免状（裏）
-  </div>
-
-  <div
-    id="currentLicenseBackEmpty"
-    class="current-license-empty"
-  >
-    未登録
-  </div>
-
-  <img
-    id="currentLicenseBackImage"
-    alt="現在の危険物免状 裏"
-    style="
-      display: none;
-      width: 100%;
-      max-height: 350px;
-      object-fit: contain;
-      margin-top: 10px;
-      border: 1px solid #cccccc;
-      border-radius: 6px;
-      background-color: #ffffff;
-    "
-  >
-
-</div>
-
-
 </div>
 <!-- ↑ current-data-area を閉じる -->
 
@@ -1860,64 +1795,6 @@ licenseUpdateButton.addEventListener("click", function () {
     .textContent =
       currentEmployeeData.safetyTrainingScheduledDate ||
       "未登録";
-
-  /* 現在の危険物免状 表を表示 */
-
-const currentLicenseFrontImage =
-  document.getElementById("currentLicenseFrontImage");
-
-const currentLicenseFrontEmpty =
-  document.getElementById("currentLicenseFrontEmpty");
-
-
-if (currentEmployeeData.licenseFront) {
-
-  currentLicenseFrontImage.src =
-    "data:" +
-    currentEmployeeData.licenseFrontContentType +
-    ";base64," +
-    currentEmployeeData.licenseFront;
-
-  currentLicenseFrontImage.style.display = "block";
-  currentLicenseFrontEmpty.style.display = "none";
-
-} else {
-
-  currentLicenseFrontImage.src = "";
-  currentLicenseFrontImage.style.display = "none";
-  currentLicenseFrontEmpty.style.display = "block";
-
-}
-
-
-/* 現在の危険物免状 裏を表示 */
-
-const currentLicenseBackImage =
-  document.getElementById("currentLicenseBackImage");
-
-const currentLicenseBackEmpty =
-  document.getElementById("currentLicenseBackEmpty");
-
-
-if (currentEmployeeData.licenseBack) {
-
-  currentLicenseBackImage.src =
-    "data:" +
-    currentEmployeeData.licenseBackContentType +
-    ";base64," +
-    currentEmployeeData.licenseBack;
-
-  currentLicenseBackImage.style.display = "block";
-  currentLicenseBackEmpty.style.display = "none";
-
-} else {
-
-  currentLicenseBackImage.src = "";
-  currentLicenseBackImage.style.display = "none";
-  currentLicenseBackEmpty.style.display = "block";
-
-}
-
 
   /* 従業員情報確認画面を閉じる */
   employeeScreen.style.display = "none";
