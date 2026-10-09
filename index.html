@@ -1423,13 +1423,16 @@ const updatePasswordConfirmButton =
   document.getElementById("updatePasswordConfirmButton");
 
 
-function requestUpdatePassword() {
+function requestUpdatePassword(initialMessage = "") {
 
   return new Promise(function (resolve) {
 
-    /* 前回の入力内容とメッセージを消す */
+    /* 前回の入力内容を消す */
     updatePasswordInput.value = "";
-    updatePasswordMessage.textContent = "";
+
+    /* 指定されたメッセージを表示 */
+    updatePasswordMessage.textContent =
+      initialMessage;
 
     /* ポップアップを開く */
     updatePasswordModal.classList.add("is-open");
