@@ -532,6 +532,51 @@ margin-top: 24px;
     #updatePasswordMessage:empty {
       display: none;
     }
+
+    /* ====================================== */
+/* KeePer資格 */
+/* ====================================== */
+
+.keeper-group {
+  margin-top: 12px;
+}
+
+.keeper-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  width: 100%;
+}
+
+.keeper-title {
+  min-width: 70px;
+  color: #444444;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.keeper-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: auto;
+  margin: 0;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.keeper-option input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  accent-color: #00b84f;
+  box-shadow: none;
+  cursor: pointer;
+}
     
   </style>
 </head>
@@ -1286,54 +1331,53 @@ margin-top: 24px;
   </div>
 
 
-  <div class="form-group">
+  <div class="form-group keeper-group">
 
-    <label>
-      KeePer資格
-      <span class="required">必須</span>
-    </label>
+  <div class="keeper-row">
 
+    <div class="keeper-title">
+      KeePer
+    </div>
 
-    <label>
+    <label class="keeper-option">
       <input
         type="checkbox"
         name="keeperQualification"
         value="2級"
       >
-      2級
+      <span>2級</span>
     </label>
 
-
-    <label>
+    <label class="keeper-option">
       <input
         type="checkbox"
         name="keeperQualification"
         value="1級"
       >
-      1級
+      <span>1級</span>
     </label>
 
-
-    <label>
+    <label class="keeper-option">
       <input
         type="checkbox"
         name="keeperQualification"
         value="DIA Ⅱ"
       >
-      DIA Ⅱ
+      <span>DIA Ⅱ</span>
     </label>
 
-
-    <label>
+    <label class="keeper-option">
       <input
         type="checkbox"
         name="keeperQualification"
         value="EX"
       >
-      EX
+      <span>EX</span>
     </label>
 
   </div>
+
+</div>
 
 </div>
 
