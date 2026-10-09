@@ -1419,6 +1419,41 @@ margin-top: 24px;
 
 </div>
 
+  <!-- ====================================== -->
+<!-- その他資格 -->
+<!-- ====================================== -->
+
+<div class="form-group">
+
+  <label>
+    現在のその他資格
+  </label>
+
+  <div
+    id="currentOtherQualificationDisplay"
+    class="current-other-qualification"
+  >
+    未登録
+  </div>
+
+</div>
+
+
+<div class="form-group">
+
+  <label for="otherQualificationAdd">
+    今回取得したその他資格
+  </label>
+
+  <input
+    type="text"
+    id="otherQualificationAdd"
+    placeholder="取得した資格を入力して下さい"
+    autocomplete="off"
+  >
+
+</div>
+
 </div>
 
     </div>
@@ -1670,9 +1705,9 @@ let currentEmployeeData = {
   licenseBack: "",
   licenseBackContentType: "",
   keeper: [],
-  mechanic: []
+  mechanic: [],
+  otherQualification: ""
 };
-
 loginButton.addEventListener("click", async function () {
 
   const password =
@@ -1941,8 +1976,11 @@ currentEmployeeData.mechanic =
     : [];
 
 
-document.getElementById("reportSelect").style.display = "block";
+/* その他資格の現在値を保持 */
+currentEmployeeData.otherQualification =
+  data.currentOtherQualification || "";
 
+document.getElementById("reportSelect").style.display = "block";
 
       } catch (error) {
 
@@ -2277,6 +2315,27 @@ otherQualificationButton.addEventListener("click", function () {
         );
 
     });
+
+
+  /* ====================================== */
+  /* その他資格の現在値を表示 */
+  /* ====================================== */
+
+  document
+    .getElementById(
+      "currentOtherQualificationDisplay"
+    )
+    .textContent =
+      currentEmployeeData.otherQualification ||
+      "未登録";
+
+
+  /* 今回取得した資格の入力欄をクリア */
+  document
+    .getElementById(
+      "otherQualificationAdd"
+    )
+    .value = "";
 
 
   employeeScreen.style.display = "none";
