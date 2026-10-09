@@ -451,6 +451,88 @@ margin-top: 24px;
         margin-bottom: 18px;
       }
     }
+
+        /* ====================================== */
+    /* 更新確認用パスワードポップアップ */
+    /* ====================================== */
+
+    .password-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.55);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-modal-overlay.is-open {
+      display: flex;
+    }
+
+    .password-modal {
+      width: 100%;
+      max-width: 420px;
+      padding: 26px;
+      background-color: #ffffff;
+      border-top: 5px solid #00c853;
+      border-radius: 12px;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+    }
+
+    .password-modal-title {
+      margin: 0 0 12px;
+      color: #00b84f;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .password-modal-description {
+      margin: 0 0 20px;
+      color: #555555;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .password-modal-button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .password-modal-button-row button {
+      flex: 1;
+      width: auto;
+      margin-top: 0;
+    }
+
+    .password-modal-cancel-button {
+      background-color: #777777;
+    }
+
+    .password-modal-cancel-button:hover {
+      background-color: #666666;
+    }
+
+    .password-modal-cancel-button:active {
+      background-color: #555555;
+    }
+
+    #updatePasswordMessage {
+      margin-top: 14px;
+      color: #d93025;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #updatePasswordMessage:empty {
+      display: none;
+    }
+    
   </style>
 </head>
 
@@ -1229,6 +1311,70 @@ margin-top: 24px;
 </div>
 <!-- page 終了 -->
 
+  <!-- ====================================== -->
+<!-- 更新確認用パスワードポップアップ -->
+<!-- ====================================== -->
+
+<div
+  id="updatePasswordModal"
+  class="password-modal-overlay"
+  aria-hidden="true"
+>
+
+  <div
+    class="password-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="updatePasswordModalTitle"
+  >
+
+    <div
+      id="updatePasswordModalTitle"
+      class="password-modal-title"
+    >
+      更新確認
+    </div>
+
+    <p class="password-modal-description">
+      資格情報を更新するため、更新用パスワードを入力して下さい。
+    </p>
+
+    <label for="updatePasswordInput">
+      更新用パスワード
+      <span class="required">必須</span>
+    </label>
+
+    <input
+      type="password"
+      id="updatePasswordInput"
+      placeholder="更新用パスワードを入力して下さい"
+      autocomplete="off"
+    >
+
+    <div id="updatePasswordMessage"></div>
+
+    <div class="password-modal-button-row">
+
+      <button
+        type="button"
+        id="updatePasswordCancelButton"
+        class="password-modal-cancel-button"
+      >
+        キャンセル
+      </button>
+
+      <button
+        type="button"
+        id="updatePasswordConfirmButton"
+      >
+        確認して更新
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 <script>
 
@@ -1255,6 +1401,143 @@ const loginScreen =
 
 const employeeScreen =
   document.getElementById("employeeScreen");
+
+
+/* ====================================== */
+/* 更新確認用パスワードポップアップ */
+/* ====================================== */
+
+const updatePasswordModal =
+  document.getElementById("updatePasswordModal");
+
+const updatePasswordInput =
+  document.getElementById("updatePasswordInput");
+
+const updatePasswordMessage =
+  document.getElementById("updatePasswordMessage");
+
+const updatePasswordCancelButton =
+  document.getElementById("updatePasswordCancelButton");
+
+const updatePasswordConfirmButton =
+  document.getElementById("updatePasswordConfirmButton");
+
+
+function requestUpdatePassword() {
+
+  return new Promise(function (resolve) {
+
+    /* 前回の入力内容とメッセージを消す */
+    updatePasswordInput.value = "";
+    updatePasswordMessage.textContent = "";
+
+    /* ポップアップを開く */
+    updatePasswordModal.classList.add("is-open");
+
+    updatePasswordModal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    /* パスワード欄にカーソルを移す */
+    setTimeout(function () {
+
+      updatePasswordInput.focus();
+
+    }, 0);
+
+
+    /* ポップアップを閉じる共通処理 */
+    function closeUpdatePasswordModal() {
+
+      updatePasswordModal.classList.remove("is-open");
+
+      updatePasswordModal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      updatePasswordInput.value = "";
+      updatePasswordMessage.textContent = "";
+
+      updatePasswordConfirmButton.onclick = null;
+      updatePasswordCancelButton.onclick = null;
+      updatePasswordInput.onkeydown = null;
+
+    }
+
+
+    /* 確認して更新 */
+    function confirmUpdatePassword() {
+
+      const password =
+        updatePasswordInput.value.trim();
+
+      if (!password) {
+
+        updatePasswordMessage.textContent =
+          "更新用パスワードを入力して下さい。";
+
+        updatePasswordInput.focus();
+
+        return;
+      }
+
+      closeUpdatePasswordModal();
+
+      resolve(password);
+
+    }
+
+
+    /* キャンセル */
+    updatePasswordCancelButton.onclick =
+      function () {
+
+        closeUpdatePasswordModal();
+
+        resolve(null);
+
+      };
+
+
+    /* 確認して更新 */
+    updatePasswordConfirmButton.onclick =
+      function () {
+
+        confirmUpdatePassword();
+
+      };
+
+
+    /* パスワード欄でEnterを押しても確認 */
+    updatePasswordInput.onkeydown =
+      function (event) {
+
+        if (event.key === "Enter") {
+
+          event.preventDefault();
+
+          confirmUpdatePassword();
+
+        }
+
+        if (event.key === "Escape") {
+
+          event.preventDefault();
+
+          closeUpdatePasswordModal();
+
+          resolve(null);
+
+        }
+
+      };
+
+  });
+
+}
+
 
   /* kintoneから取得した現在値を保持 */
 let currentEmployeeData = {
@@ -2371,10 +2654,25 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
   }
 
     /* ====================================== */
+  /* 更新用パスワードを入力 */
+  /* ====================================== */
+
+  const updatePassword =
+    await requestUpdatePassword();
+
+
+  /* キャンセルされた場合は更新しない */
+  if (updatePassword === null) {
+
+    return;
+
+  }
+
+    /* ====================================== */
   /* Power Automateへ送るデータを作成 */
   /* ====================================== */
 
-  const requestBody = {
+    const requestBody = {
 
     employeeNo:
       document
@@ -2383,7 +2681,10 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
         .trim(),
 
     updateType:
-      "licenseRenewal"
+      "licenseRenewal",
+
+    password:
+      updatePassword
 
   };
 
@@ -2693,6 +2994,20 @@ if (!licenseBackImage) {
   return;
 }
 
+    /* ====================================== */
+  /* 更新用パスワードを入力 */
+  /* ====================================== */
+
+  const updatePassword =
+    await requestUpdatePassword();
+
+
+  /* キャンセルされた場合は更新しない */
+  if (updatePassword === null) {
+
+    return;
+
+  }
 
   /* ====================================== */
   /* Power Automateへ送信 */
@@ -2723,18 +3038,21 @@ if (!licenseBackImage) {
             "Content-Type": "application/json"
           },
 
-          body: JSON.stringify({
+body: JSON.stringify({
 
   employeeNo: employeeNo,
 
   updateType: "licenseGet",
+
+  password:
+    updatePassword,
 
   hazardousMaterial:
     hazardousMaterial,
 
   issueDate:
     issueDate,
-
+  
   photoExpiryDate:
     photoExpiryDate,
 
