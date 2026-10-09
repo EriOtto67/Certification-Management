@@ -2636,7 +2636,8 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
   licenseRenewalUpdateMessage.textContent = "";
   licenseRenewalUpdateMessage.className = "";
 
-    /* ====================================== */
+
+  /* ====================================== */
   /* 変更内容があるか確認 */
   /* ====================================== */
 
@@ -2654,9 +2655,11 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
       "error";
 
     return;
+
   }
 
-    /* ====================================== */
+
+  /* ====================================== */
   /* 更新用パスワードを入力 */
   /* ====================================== */
 
@@ -2671,11 +2674,12 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
   }
 
-    /* ====================================== */
+
+  /* ====================================== */
   /* Power Automateへ送るデータを作成 */
   /* ====================================== */
 
-    const requestBody = {
+  const requestBody = {
 
     employeeNo:
       document
@@ -2712,7 +2716,8 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
   }
 
-    /* ====================================== */
+
+  /* ====================================== */
   /* 新しい表画像がある場合 */
   /* ====================================== */
 
@@ -2747,6 +2752,7 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
   }
 
+
   /* ====================================== */
   /* Power Automateへ送信 */
   /* ====================================== */
@@ -2759,60 +2765,118 @@ licenseRenewalUpdateButton.addEventListener("click", async function () {
 
   try {
 
-    const response =
-      await fetch(
-        UPDATE_FLOW_URL,
-        {
-          method: "POST",
+    let response;
+    let data;
 
-          headers: {
-            "Content-Type": "application/json"
-          },
 
-          body: JSON.stringify(
-            requestBody
-          )
+    while (true) {
+
+      response =
+        await fetch(
+          UPDATE_FLOW_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(
+              requestBody
+            )
+          }
+        );
+
+
+      /* ====================================== */
+      /* 更新用パスワードが違う場合 */
+      /* ====================================== */
+
+      if (response.status === 401) {
+
+        const newUpdatePassword =
+          await requestUpdatePassword(
+            "更新用パスワードが違います。"
+          );
+
+
+        /* 再入力時にキャンセルされた場合 */
+        if (newUpdatePassword === null) {
+
+          return;
+
         }
-      );
 
 
-    if (!response.ok) {
+        /* 新しく入力したパスワードへ差し替える */
+        requestBody.password =
+          newUpdatePassword;
 
-      throw new Error(
-        "HTTP " + response.status
-      );
+
+        /* 新しいパスワードで再送信する */
+        continue;
+
+      }
+
+
+      /* ====================================== */
+      /* 401以外のHTTPエラー */
+      /* ====================================== */
+
+      if (!response.ok) {
+
+        throw new Error(
+          "HTTP " + response.status
+        );
+
+      }
+
+
+      data =
+        await response.json();
+
+
+      /* ====================================== */
+      /* Power Automateの処理結果を確認 */
+      /* ====================================== */
+
+      if (data.success !== true) {
+
+        throw new Error(
+          "更新処理が正常終了しませんでした。"
+        );
+
+      }
+
+
+      /* 更新成功のため、再送信処理を終了 */
+      break;
 
     }
 
 
-    const data =
-      await response.json();
-
-
-    if (data.success !== true) {
-
-      throw new Error(
-        "更新処理が正常終了しませんでした。"
-      );
-
-    }
-
+    /* ====================================== */
     /* 更新した値を現在値にも反映 */
+    /* ====================================== */
 
-if (photoExpiryDate) {
-  currentEmployeeData.photoExpiryDate =
-    photoExpiryDate;
-}
+    if (photoExpiryDate) {
 
-if (safetyTrainingDate) {
+      currentEmployeeData.photoExpiryDate =
+        photoExpiryDate;
 
-  currentEmployeeData.safetyTrainingDate =
-    safetyTrainingDate;
+    }
 
-  currentEmployeeData.safetyTrainingScheduledDate =
-    safetyTrainingScheduledDate;
 
-}
+    if (safetyTrainingDate) {
+
+      currentEmployeeData.safetyTrainingDate =
+        safetyTrainingDate;
+
+      currentEmployeeData.safetyTrainingScheduledDate =
+        safetyTrainingScheduledDate;
+
+    }
+
 
     licenseRenewalUpdateMessage.textContent =
       "資格情報を更新しました。";
