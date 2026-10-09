@@ -1379,6 +1379,46 @@ margin-top: 24px;
 
 </div>
 
+
+<div class="form-group keeper-group">
+
+  <div class="keeper-row">
+
+    <div class="keeper-title">
+      整備士
+    </div>
+
+    <label class="keeper-option">
+      <input
+        type="checkbox"
+        name="mechanicQualification"
+        value="3級"
+      >
+      <span>3級</span>
+    </label>
+
+    <label class="keeper-option">
+      <input
+        type="checkbox"
+        name="mechanicQualification"
+        value="2級"
+      >
+      <span>2級</span>
+    </label>
+
+    <label class="keeper-option">
+      <input
+        type="checkbox"
+        name="mechanicQualification"
+        value="検査員"
+      >
+      <span>検査員</span>
+    </label>
+
+  </div>
+
+</div>
+
 </div>
 
     </div>
@@ -1629,7 +1669,8 @@ let currentEmployeeData = {
   licenseFrontContentType: "",
   licenseBack: "",
   licenseBackContentType: "",
-  keeper: []
+  keeper: [],
+  mechanic: []
 };
 
 loginButton.addEventListener("click", async function () {
@@ -1890,6 +1931,13 @@ currentEmployeeData.licenseBackContentType =
 currentEmployeeData.keeper =
   Array.isArray(data.currentKeeper)
     ? data.currentKeeper
+    : [];
+
+
+/* 整備士資格の現在値を保持 */
+currentEmployeeData.mechanic =
+  Array.isArray(data.currentMechanic)
+    ? data.currentMechanic
     : [];
 
 
@@ -2207,6 +2255,24 @@ otherQualificationButton.addEventListener("click", function () {
 
       checkbox.checked =
         currentEmployeeData.keeper.includes(
+          checkbox.value
+        );
+
+    });
+
+
+  /* ====================================== */
+  /* 整備士の現在の資格をチェック状態へ反映 */
+  /* ====================================== */
+
+  document
+    .querySelectorAll(
+      'input[name="mechanicQualification"]'
+    )
+    .forEach(function (checkbox) {
+
+      checkbox.checked =
+        currentEmployeeData.mechanic.includes(
           checkbox.value
         );
 
