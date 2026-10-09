@@ -1509,26 +1509,56 @@ loginPassword.addEventListener("keydown", function (event) {
         }
 
 
-        const data =
-          await response.json();
+            const data =
+      await response.json();
 
 
-        if (!data.name) {
+    /* ====================================== */
+    /* 確認用パスワードエラー */
+    /* ====================================== */
 
-          message.textContent =
-            "該当する従業員が見つかりませんでした。";
+    if (data.success === false) {
 
-          message.className =
-            "error";
+      message.textContent =
+        data.message || "パスワードが違います。";
 
-          return;
-        }
+      message.className =
+        "error";
+
+      /* パスワードだけクリア */
+      document
+        .getElementById("employeeSearchPassword")
+        .value = "";
+
+      /* パスワード入力欄に戻す */
+      document
+        .getElementById("employeeSearchPassword")
+        .focus();
+
+      return;
+    }
 
 
-        message.innerHTML =
-  "所属ブロック：<strong>" + data.block + "</strong><br>" +
-  "所属SS：<strong>" + data.ss + "</strong><br>" +
-  "氏名：<strong>" + data.name + "</strong>";
+    /* ====================================== */
+    /* 従業員が存在するか確認 */
+    /* ====================================== */
+
+    if (!data.name) {
+
+      message.textContent =
+        "該当する従業員が見つかりませんでした。";
+
+      message.className =
+        "error";
+
+      return;
+    }
+
+
+    message.innerHTML =
+      "所属ブロック：<strong>" + data.block + "</strong><br>" +
+      "所属SS：<strong>" + data.ss + "</strong><br>" +
+      "氏名：<strong>" + data.name + "</strong>";
 
         message.className =
           "success";
