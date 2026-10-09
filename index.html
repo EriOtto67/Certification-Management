@@ -3038,8 +3038,247 @@ issueDateUpdateButton.addEventListener("click", async function () {
 
     return;
   }
-  
-  </script>
+
+
+  if (!licenseFrontImage) {
+
+    issueDateUpdateMessage.textContent =
+      "危険物免状（表）の画像を選択または撮影して下さい。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+
+  if (!licenseBackImage) {
+
+    issueDateUpdateMessage.textContent =
+      "危険物免状（裏）の画像を選択または撮影して下さい。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+
+  /* ====================================== */
+  /* 更新用パスワードを入力 */
+  /* ====================================== */
+
+  const updatePassword =
+    await requestUpdatePassword();
+
+
+  /* キャンセルされた場合は更新しない */
+  if (updatePassword === null) {
+
+    return;
+  }
+
+
+  /* ====================================== */
+  /* 画像をBase64へ変換 */
+  /* ====================================== */
+
+  let licenseFrontBase64;
+  let licenseBackBase64;
+
+
+  try {
+
+    licenseFrontBase64 =
+      await fileToBase64(
+        licenseFrontImage
+      );
+
+    licenseBackBase64 =
+      await fileToBase64(
+        licenseBackImage
+      );
+
+  } catch (error) {
+
+    console.error(error);
+
+    issueDateUpdateMessage.textContent =
+      "画像の読み込みに失敗しました。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+    return;
+  }
+
+
+  /* ====================================== */
+  /* Power Automateへ送る本文を作成 */
+  /* ====================================== */
+
+  const requestBody = {
+
+    employeeNo:
+      employeeNo,
+
+    updateType:
+      "licenseGet",
+
+    password:
+      updatePassword,
+
+    hazardousMaterial:
+      hazardousMaterial,
+
+    issueDate:
+      issueDate,
+
+    photoExpiryDate:
+      photoExpiryDate,
+
+    licenseFront:
+      licenseFrontBase64,
+
+    licenseFrontName:
+      licenseFrontImage.name,
+
+    licenseBack:
+      licenseBackBase64,
+
+    licenseBackName:
+      licenseBackImage.name
+
+  };
+
+
+  /* ====================================== */
+  /* Power Automateへ送信 */
+  /* ====================================== */
+
+  issueDateUpdateButton.disabled = true;
+
+  issueDateUpdateButton.textContent =
+    "更新中です...";
+
+
+  try {
+
+    let response;
+    let data;
+
+
+    while (true) {
+
+      response =
+        await fetch(
+          UPDATE_FLOW_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify(
+              requestBody
+            )
+          }
+        );
+
+
+      /* ====================================== */
+      /* 更新用パスワードが違う場合 */
+      /* ====================================== */
+
+      if (response.status === 401) {
+
+        const newUpdatePassword =
+          await requestUpdatePassword(
+            "更新用パスワードが違います。"
+          );
+
+
+        /* 再入力時にキャンセルされた場合 */
+        if (newUpdatePassword === null) {
+
+          return;
+        }
+
+
+        /* 新しいパスワードへ差し替える */
+        requestBody.password =
+          newUpdatePassword;
+
+
+        /* 新しいパスワードで再送信する */
+        continue;
+      }
+
+
+      /* ====================================== */
+      /* 401以外のHTTPエラー */
+      /* ====================================== */
+
+      if (!response.ok) {
+
+        throw new Error(
+          "HTTP " + response.status
+        );
+      }
+
+
+      data =
+        await response.json();
+
+
+      /* ====================================== */
+      /* Power Automateの処理結果を確認 */
+      /* ====================================== */
+
+      if (data.success !== true) {
+
+        throw new Error(
+          "更新処理が正常終了しませんでした。"
+        );
+      }
+
+
+      /* 更新成功のため再送信処理を終了 */
+      break;
+    }
+
+
+    issueDateUpdateMessage.textContent =
+      "資格情報を更新しました。";
+
+    issueDateUpdateMessage.className =
+      "success";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    issueDateUpdateMessage.textContent =
+      "資格情報の更新に失敗しました。";
+
+    issueDateUpdateMessage.className =
+      "error";
+
+
+  } finally {
+
+    issueDateUpdateButton.disabled = false;
+
+    issueDateUpdateButton.textContent =
+      "更新する";
+  }
+
+});
+
+</script>
 
 </body>
 
