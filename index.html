@@ -1443,7 +1443,7 @@ margin-top: 24px;
 <div class="form-group">
 
   <label for="otherQualificationAdd">
-    新たに登録するその他資格
+    今回取得したその他資格
   </label>
 
   <input
@@ -1452,6 +1452,24 @@ margin-top: 24px;
     placeholder="取得した資格を入力して下さい"
     autocomplete="off"
   >
+
+</div>
+
+
+<!-- ====================================== -->
+<!-- その他資格取得時・更新ボタン -->
+<!-- ====================================== -->
+
+<div class="update-button-area">
+
+  <button
+    type="button"
+    id="otherQualificationUpdateButton"
+  >
+    更新する
+  </button>
+
+  <div id="otherQualificationUpdateMessage"></div>
 
 </div>
 
@@ -2820,6 +2838,334 @@ updateLicenseBackDeleteButton.addEventListener("click", function () {
   updateLicenseBackDeleteButton.style.display = "none";
 
 });
+
+  /* ====================================== */
+/* その他資格取得時・資格情報更新 */
+/* ====================================== */
+
+const otherQualificationUpdateButton =
+  document.getElementById(
+    "otherQualificationUpdateButton"
+  );
+
+const otherQualificationUpdateMessage =
+  document.getElementById(
+    "otherQualificationUpdateMessage"
+  );
+
+
+otherQualificationUpdateButton.addEventListener(
+  "click",
+  async function () {
+
+    otherQualificationUpdateMessage.textContent = "";
+    otherQualificationUpdateMessage.className = "";
+
+
+    /* ====================================== */
+    /* KeePerのチェック状態を取得 */
+    /* ====================================== */
+
+    const keeperValues =
+      Array.from(
+        document.querySelectorAll(
+          'input[name="keeperQualification"]:checked'
+        )
+      ).map(function (checkbox) {
+
+        return checkbox.value;
+
+      });
+
+
+    /* ====================================== */
+    /* 整備士のチェック状態を取得 */
+    /* ====================================== */
+
+    const mechanicValues =
+      Array.from(
+        document.querySelectorAll(
+          'input[name="mechanicQualification"]:checked'
+        )
+      ).map(function (checkbox) {
+
+        return checkbox.value;
+
+      });
+
+
+    /* ====================================== */
+    /* 今回取得したその他資格 */
+    /* ====================================== */
+
+    const newOtherQualification =
+      document
+        .getElementById("otherQualificationAdd")
+        .value
+        .trim();
+
+
+    /* ====================================== */
+    /* その他資格の保存値を作成 */
+    /* ====================================== */
+
+    let otherQualificationValue =
+      currentEmployeeData.otherQualification.trim();
+
+
+    if (newOtherQualification) {
+
+      if (otherQualificationValue) {
+
+        otherQualificationValue +=
+          "、" + newOtherQualification;
+
+      } else {
+
+        otherQualificationValue =
+          newOtherQualification;
+
+      }
+
+    }
+
+
+    /* ====================================== */
+    /* 変更があるか確認 */
+    /* ====================================== */
+
+    const keeperChanged =
+      JSON.stringify(keeperValues) !==
+      JSON.stringify(currentEmployeeData.keeper);
+
+
+    const mechanicChanged =
+      JSON.stringify(mechanicValues) !==
+      JSON.stringify(currentEmployeeData.mechanic);
+
+
+    const otherQualificationChanged =
+      newOtherQualification !== "";
+
+
+    if (
+      !keeperChanged &&
+      !mechanicChanged &&
+      !otherQualificationChanged
+    ) {
+
+      otherQualificationUpdateMessage.textContent =
+        "更新する項目を選択または入力して下さい。";
+
+      otherQualificationUpdateMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    /* ====================================== */
+    /* 更新用パスワード */
+    /* ====================================== */
+
+    const updatePassword =
+      await requestUpdatePassword();
+
+
+    if (updatePassword === null) {
+
+      return;
+
+    }
+
+
+    /* ====================================== */
+    /* Power Automateへ送る本文 */
+    /* ====================================== */
+
+    const requestBody = {
+
+      employeeNo:
+        document
+          .getElementById("employeeNo")
+          .value
+          .trim(),
+
+      updateType:
+        "otherQualification",
+
+      password:
+        updatePassword,
+
+      keeper:
+        keeperValues,
+
+      mechanic:
+        mechanicValues,
+
+      otherQualification:
+        otherQualificationValue
+
+    };
+
+
+    /* ====================================== */
+    /* Power Automateへ送信 */
+    /* ====================================== */
+
+    otherQualificationUpdateButton.disabled = true;
+
+    otherQualificationUpdateButton.textContent =
+      "更新中です...";
+
+
+    try {
+
+      let response;
+      let data;
+
+
+      while (true) {
+
+        response =
+          await fetch(
+            UPDATE_FLOW_URL,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify(
+                requestBody
+              )
+            }
+          );
+
+
+        /* ====================================== */
+        /* 更新用パスワードが違う */
+        /* ====================================== */
+
+        if (response.status === 401) {
+
+          const newUpdatePassword =
+            await requestUpdatePassword(
+              "更新用パスワードが違います。"
+            );
+
+
+          if (newUpdatePassword === null) {
+
+            return;
+
+          }
+
+
+          requestBody.password =
+            newUpdatePassword;
+
+
+          continue;
+
+        }
+
+
+        /* ====================================== */
+        /* その他のHTTPエラー */
+        /* ====================================== */
+
+        if (!response.ok) {
+
+          throw new Error(
+            "HTTP " + response.status
+          );
+
+        }
+
+
+        data =
+          await response.json();
+
+
+        if (data.success !== true) {
+
+          throw new Error(
+            "更新処理が正常終了しませんでした。"
+          );
+
+        }
+
+
+        break;
+
+      }
+
+
+      /* ====================================== */
+      /* 更新成功後、保持している現在値も更新 */
+      /* ====================================== */
+
+      currentEmployeeData.keeper =
+        [...keeperValues];
+
+      currentEmployeeData.mechanic =
+        [...mechanicValues];
+
+      currentEmployeeData.otherQualification =
+        otherQualificationValue;
+
+
+      /* 現在のその他資格の表示も更新 */
+      document
+        .getElementById(
+          "currentOtherQualificationDisplay"
+        )
+        .value =
+          otherQualificationValue ||
+          "未登録";
+
+
+      /* 追加入力欄をクリア */
+      document
+        .getElementById(
+          "otherQualificationAdd"
+        )
+        .value = "";
+
+
+      otherQualificationUpdateMessage.textContent =
+        "資格情報を更新しました。";
+
+      otherQualificationUpdateMessage.className =
+        "success";
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      otherQualificationUpdateMessage.textContent =
+        "資格情報の更新に失敗しました。";
+
+      otherQualificationUpdateMessage.className =
+        "error";
+
+
+    } finally {
+
+      otherQualificationUpdateButton.disabled = false;
+
+      otherQualificationUpdateButton.textContent =
+        "更新する";
+
+    }
+
+  }
+);
 
   /* ====================================== */
 /* 免状更新時・資格情報更新 */
