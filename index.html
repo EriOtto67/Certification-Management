@@ -1285,19 +1285,53 @@ margin-top: 24px;
     その他資格取得時
   </div>
 
+
   <div class="form-group">
 
-    <label for="otherQualification">
-      その他資格
+    <label>
+      KeePer資格
       <span class="required">必須</span>
     </label>
 
-    <input
-      type="text"
-      id="otherQualification"
-      placeholder="取得した資格を入力して下さい"
-      autocomplete="off"
-    >
+
+    <label>
+      <input
+        type="checkbox"
+        name="keeperQualification"
+        value="2級"
+      >
+      2級
+    </label>
+
+
+    <label>
+      <input
+        type="checkbox"
+        name="keeperQualification"
+        value="1級"
+      >
+      1級
+    </label>
+
+
+    <label>
+      <input
+        type="checkbox"
+        name="keeperQualification"
+        value="DIA Ⅱ"
+      >
+      DIA Ⅱ
+    </label>
+
+
+    <label>
+      <input
+        type="checkbox"
+        name="keeperQualification"
+        value="EX"
+      >
+      EX
+    </label>
 
   </div>
 
@@ -1807,7 +1841,15 @@ currentEmployeeData.licenseBack =
 currentEmployeeData.licenseBackContentType =
   data.currentLicenseBackContentType || "";
 
-        document.getElementById("reportSelect").style.display = "block";
+
+/* KeePer資格の現在値を保持 */
+currentEmployeeData.keeper =
+  Array.isArray(data.currentKeeper)
+    ? data.currentKeeper
+    : [];
+
+
+document.getElementById("reportSelect").style.display = "block";
 
 
       } catch (error) {
@@ -2108,11 +2150,31 @@ otherQualificationButton.addEventListener("click", function () {
 
   hideAllReportFields();
 
+
+  /* ====================================== */
+  /* KeePerの現在の資格をチェック状態へ反映 */
+  /* ====================================== */
+
+  document
+    .querySelectorAll(
+      'input[name="keeperQualification"]'
+    )
+    .forEach(function (checkbox) {
+
+      checkbox.checked =
+        currentEmployeeData.keeper.includes(
+          checkbox.value
+        );
+
+    });
+
+
   employeeScreen.style.display = "none";
 
   updateScreen.style.display = "block";
 
   otherQualificationFields.style.display = "block";
+
 
   window.scrollTo({
     top: 0,
