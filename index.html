@@ -2983,16 +2983,17 @@ issueDateUpdateButton.addEventListener("click", async function () {
       .getElementById("licensePhotoExpiryDate")
       .value;
 
+
   /* 危険物免状 表 */
-const licenseFrontImage =
-  licenseFrontFile.files[0] ||
-  licenseFrontCamera.files[0];
+  const licenseFrontImage =
+    licenseFrontFile.files[0] ||
+    licenseFrontCamera.files[0];
 
 
-/* 危険物免状 裏 */
-const licenseBackImage =
-  licenseBackFile.files[0] ||
-  licenseBackCamera.files[0];
+  /* 危険物免状 裏 */
+  const licenseBackImage =
+    licenseBackFile.files[0] ||
+    licenseBackCamera.files[0];
 
 
   issueDateUpdateMessage.textContent = "";
@@ -3037,160 +3038,6 @@ const licenseBackImage =
 
     return;
   }
-
-    if (!licenseFrontImage) {
-
-  issueDateUpdateMessage.textContent =
-    "危険物免状（表）の画像を選択または撮影して下さい。";
-
-  issueDateUpdateMessage.className =
-    "error";
-
-  return;
-}
-
-
-if (!licenseBackImage) {
-
-  issueDateUpdateMessage.textContent =
-    "危険物免状（裏）の画像を選択または撮影して下さい。";
-
-  issueDateUpdateMessage.className =
-    "error";
-
-  return;
-}
-
-    /* ====================================== */
-  /* 更新用パスワードを入力 */
-  /* ====================================== */
-
-  const updatePassword =
-    await requestUpdatePassword();
-
-
-  /* キャンセルされた場合は更新しない */
-  if (updatePassword === null) {
-
-    return;
-
-  }
-
-  /* ====================================== */
-  /* Power Automateへ送信 */
-  /* ====================================== */
-
-  issueDateUpdateButton.disabled = true;
-
-  issueDateUpdateButton.textContent =
-    "更新中です...";
-
-
-  try {
-
-        /* 表・裏画像をBase64へ変換 */
-    const licenseFrontBase64 =
-      await fileToBase64(licenseFrontImage);
-
-    const licenseBackBase64 =
-      await fileToBase64(licenseBackImage);
-
-    const response =
-      await fetch(
-        UPDATE_FLOW_URL,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-body: JSON.stringify({
-
-  employeeNo: employeeNo,
-
-  updateType: "licenseGet",
-
-  password:
-    updatePassword,
-
-  hazardousMaterial:
-    hazardousMaterial,
-
-  issueDate:
-    issueDate,
-  
-  photoExpiryDate:
-    photoExpiryDate,
-
-  licenseFront:
-    licenseFrontBase64,
-
-  licenseFrontName:
-    licenseFrontImage.name,
-
-  licenseBack:
-    licenseBackBase64,
-
-  licenseBackName:
-    licenseBackImage.name
-
-})
-
-        }
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "HTTP " + response.status
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if (data.success !== true) {
-
-      throw new Error(
-        "更新処理が正常終了しませんでした。"
-      );
-
-    }
-
-
-    issueDateUpdateMessage.textContent =
-      "資格情報を更新しました。";
-
-    issueDateUpdateMessage.className =
-      "success";
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    issueDateUpdateMessage.textContent =
-      "資格情報の更新に失敗しました。";
-
-    issueDateUpdateMessage.className =
-      "error";
-
-
-  } finally {
-
-    issueDateUpdateButton.disabled = false;
-
-    issueDateUpdateButton.textContent =
-      "更新する";
-
-  }
-
-});
   
   </script>
 
